@@ -20,14 +20,23 @@ class ProjectsController extends Controller
        return view('projects.create');
    } 
 
-   public function store()
+   public function show(Project $project)
    {
-       $project = new Project();
+    
+    return view('projects.show',compact('project'));
+       
+   } 
 
-       $project-> title= request('title');
-       $project-> description= request('description');
-       $project-> save();
+   public function store()
+   { 
+        $attributes = request()-> validate([
+            'title'=> ['required','min:6'],
+            'description' => ['required','min:6']
+        ]);
 
+   Project::create($attributes); 
+
+    
        return redirect('/projects');
    }
 
@@ -40,12 +49,9 @@ class ProjectsController extends Controller
 
    public function update($id)
    {
-    $project = Project::findOrFail($id);
-    $project->title = request('title');
-    $project->description = request('description');
 
-    $project->save();
-
+    $project->update(request(['title','description'])) ;
+    
     return redirect('/projects');
        
    }
