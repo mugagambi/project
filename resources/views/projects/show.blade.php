@@ -41,7 +41,7 @@
 
 
     <div class="control">
-        <input type="text" class="input" name="description" placeholder="">
+        <input type="text" class="input" name="description" placeholder="" required>
     </div>
     </div>
 
@@ -49,7 +49,9 @@
 			<div class="control">
 				<button type="submit" class="button is-link">Add Task</button>
 			</div>
-			</div>
+            </div>
+            
+        @include ('errors')
     
 </form>
 
