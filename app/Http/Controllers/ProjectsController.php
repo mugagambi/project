@@ -15,6 +15,11 @@ class ProjectsController extends Controller
         return view('projects.index', compact('projects'));
     }
 
+    public function __construct(){
+        $this->middleware('auth');
+
+    }
+
     public function create()
    {
        return view('projects.create');
@@ -22,6 +27,13 @@ class ProjectsController extends Controller
 
    public function show(Project $project)
    {
+
+    // if($project->owner_id !== auth()->id()){  method one of authorization
+    //     abort(403);
+    // }
+    // abort_if($project->owner_id !== auth()->id(),403); method two
+
+    $this->authorize('update',$project);
     
     return view('projects.show',compact('project'));
        
@@ -33,6 +45,8 @@ class ProjectsController extends Controller
             'title'=> ['required','min:6'],
             'description' => ['required','min:6']
         ]);
+
+        $attributes['owner_id'] = auth()->id();
 
    Project::create($attributes); 
 
