@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 use App\Project;
+use App\Mail\ProjectCreated;
 
 
 class ProjectsController extends Controller
@@ -10,6 +11,11 @@ class ProjectsController extends Controller
     {
     
         $projects = Project:: where('owner_id',auth()->id())->get();
+
+
+        // cache()->rememberForever('stats',function(){
+        //     return['hours'=> 45000,'lessons'=>450000, 'series'=> 2355];
+        // });
 
          
         return view('projects.index', compact('projects'));
@@ -48,8 +54,10 @@ class ProjectsController extends Controller
 
         $attributes['owner_id'] = auth()->id();
 
-   Project::create($attributes); 
-
+   $project = Project::create($attributes); 
+            \Mail::to('dorcaskemuma833@gmail.com')->send(
+               new ProjectCreated($project)
+            );
     
        return redirect('/projects');
    }
