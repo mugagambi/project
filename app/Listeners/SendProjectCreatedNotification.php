@@ -2,10 +2,11 @@
 
 namespace App\Listeners;
 
-use App\Mail\ProjectCreated as ProjectCreatedMail;
-use App\Events\ProjectCreated;
+
 use Illuminate\Support\Facades\Mail;
- 
+use App\Mail\ProjectCreated as ProjectCreatedMail;
+
+
 class SendProjectCreatedNotification
 {
     /**

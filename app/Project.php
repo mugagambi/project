@@ -3,17 +3,18 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Mail\ProjectCreated;
+use App\Mail\ProjectCreated as ProjectCreatedMail;
 use Illuminate\Support\Facades\Mail;
+use App\Events\ProjectCreated;
 
 class Project extends Model
 {
     protected $guarded = [];
 
+    protected $dispatchesEvents = [
+        'created' => ProjectCreated::class
 
-
-
-
+    ];
 
 
 
