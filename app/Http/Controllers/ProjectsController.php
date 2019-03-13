@@ -3,14 +3,16 @@
 namespace App\Http\Controllers;
 use App\Project;
 use App\Mail\ProjectCreated;
+use Illuminate\Support\Facades\Mail;
 
 
 class ProjectsController extends Controller
 {
     public function index()
     {
+       
     
-        $projects = Project:: where('owner_id',auth()->id())->get();
+       // $projects = Project:: where('owner_id',auth()->id())->get();
 
 
         // cache()->rememberForever('stats',function(){
@@ -18,7 +20,9 @@ class ProjectsController extends Controller
         // });
 
          
-        return view('projects.index', compact('projects'));
+        return view('projects.index',[
+            'projects' => auth()->user()->projects
+        ]);
     }
 
     public function __construct(){
@@ -47,41 +51,43 @@ class ProjectsController extends Controller
 
    public function store()
    { 
-        $attributes = request()-> validate([
-            'title'=> ['required','min:6'],
-            'description' => ['required','min:6']
-        ]);
+        $attributes = $this->validateProject();
 
         $attributes['owner_id'] = auth()->id();
 
-   $project = Project::create($attributes); 
-            \Mail::to('dorcaskemuma833@gmail.com')->send(
-               new ProjectCreated($project)
-            );
+         Project::create($attributes); 
+       
     
        return redirect('/projects');
    }
 
 
-   public function edit($id)
+   public function edit(Project $project)
    {
-       $project = Project::findOrFail($id);
+       
        return view('projects.edit', compact('project'));
    }
 
-   public function update($id)
+   public function update(Project $project)
    {
-
-    $project->update(request(['title','description'])) ;
+  
+    $project->update($this->validateProject()) ;
     
     return redirect('/projects');
        
    }
 
-   public function destroy($id)
+   public function destroy(Project $project)
    {
        Project::findOrFail($id)->delete();   
        return redirect('/projects'); 
+   }
+
+   public function validateProject(){
+  return request()-> validate([
+        'title'=> ['required','min:3'],
+        'description' => ['required','min:3']
+    ]);
    }
 }
  
