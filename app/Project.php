@@ -13,19 +13,7 @@ class Project extends Model
 
 
 
-    public static function boot(){
 
-
-        parent::boot();
-        
-        
-        static::created(function($project){
-            Mail::to($project->owner->email)->send(
-                new ProjectCreated($project)
-             );
-
-     });
-    }
 
 
 

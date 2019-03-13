@@ -42,7 +42,7 @@ class ProjectsController extends Controller
     //     abort(403);
     // }
     // abort_if($project->owner_id !== auth()->id(),403); method two
-
+            
     $this->authorize('update',$project);
     
     return view('projects.show',compact('project'));
@@ -55,7 +55,9 @@ class ProjectsController extends Controller
 
         $attributes['owner_id'] = auth()->id();
 
-         Project::create($attributes); 
+         $project = Project::create($attributes); 
+
+         event(new ProjectCreated($project));
        
     
        return redirect('/projects');
