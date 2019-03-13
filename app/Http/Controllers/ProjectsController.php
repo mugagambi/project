@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 use App\Project;
-use App\Mail\ProjectCreated;
+use App\Events\ProjectCreated;
 use Illuminate\Support\Facades\Mail;
 
 
